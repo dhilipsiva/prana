@@ -15,6 +15,7 @@ click = "*"
 
 
 
+
 [dev-packages]
 
 bumpversion = "*"
@@ -22,3 +23,4 @@ ipython = "*"
 tox = "*"
 twine = "*"
 pytest = "*"
+neovim = "*"
