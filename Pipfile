@@ -6,4 +6,13 @@ name = "pypi"
 [packages]
 click = "*"
 
+
+
+
+
+
 [dev-packages]
+
+bumpversion = "*"
+ipython = "*"
+tox = "*"
