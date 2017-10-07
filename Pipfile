@@ -11,8 +11,10 @@ click = "*"
 
 
 
+
 [dev-packages]
 
 bumpversion = "*"
 ipython = "*"
 tox = "*"
+twine = "*"
