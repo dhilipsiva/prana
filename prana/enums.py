@@ -22,11 +22,19 @@ class ApplianceCategory:
             return AC_WATTS
         if category == klass.LIGHT:
             return LIGHT_WATTS
-        raise ValueError("Applicance category '%d' does not exist" % category)
+        raise ValueError("Appliance category '%d' does not exist" % category)
 
     class Meta:
         AC = [1, 'AC']
         LIGHT = [2, 'Light']
+
+
+@choices
+class ApplianceStatus(ChoiceUtils):
+
+    class Meta:
+        ON = [1, "ON"]
+        OFF = [2, "OFF"]
 
 
 @choices
@@ -43,11 +51,3 @@ class CorridorCategory(ChoiceUtils):
     class Meta:
         MAIN = [1, "Main"]
         SUB = [2, "Sub"]
-
-
-@choices
-class DeviceStatus(ChoiceUtils):
-
-    class Meta:
-        ON = [1, "ON"]
-        OFF = [2, "OFF"]
