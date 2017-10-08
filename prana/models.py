@@ -162,7 +162,7 @@ class Sensor(CategoryModel):
         # Thus gicing us a clean slate to work with
         self.last_activity = datetime.now() - timedelta(minutes=2*timeout)
 
-    def register_activity(self, value=None):
+    def register_activity(self):
         """
         Invoked when given sensor detected an activity
         """
@@ -219,27 +219,17 @@ class Corridor(CategoryModel):
         sensors = self.list_sensors()
         for sensor in sensors:
             if sensor.is_active():
-                return False
-        return True
+                return True
+        return False
 
     def optimize(self, appliance_category):
         """
         Try to conserve some energy
         """
-        if not self.is_active():
+        if self.is_active():
             return
         for appliance in self.filtered_appliances(appliance_category):
             appliance.switch_off()
-
-    def refresh(self):
-        """
-        Refresh the Appliance status
-        """
-        if self.is_active():
-            return
-        for appliance in self.filtered_appliances(ApplianceCategory.LIGHT):
-            appliance.switch_off()
-        self.boot()
 
     def switch_on_appliances(self, appliance_category):
         """
@@ -314,13 +304,6 @@ class Floor(BaseModel):
             for corridor in corridors:
                 corridor.optimize(rule['appliance'])
 
-    def refresh(self):
-        """
-        Refresh appliances
-        """
-        for corridor in self.list_corridors():
-            corridor.refresh()
-
 
 class Building(BaseModel):
 
@@ -335,12 +318,11 @@ class Building(BaseModel):
     def optimize(self):
         [floor.optimize() for floor in self.list_floors()]
 
-    def refresh(self):
-        [floor.refresh() for floor in self.list_floors()]
-
     def register_activity(self, floor_id, corridor_id, sensor_id):
         floor = self.get_floor(floor_id)
         corridor = floor.get_corridor(corridor_id)
         sensor = corridor.get_sensor(sensor_id)
         sensor.register_activity()
+        for appliance in corridor.list_appliances():
+            appliance.switch_on()
         return self.optimize()
