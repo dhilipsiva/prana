@@ -46,7 +46,7 @@ for i in range(30):
     print(30-i)
     time.sleep(1)
 
-b.optimize()
+b.refresh()
 print("\n")
 print("=" * 80)
 print("BEFORE TIMEOUT")
@@ -61,7 +61,7 @@ for i in range(30):
     time.sleep(1)
 
 
-b.optimize()
+b.refresh()
 print("\n")
 print("=" * 80)
 print("AFTER TIMEOUT")

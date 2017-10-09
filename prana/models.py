@@ -231,6 +231,10 @@ class Corridor(CategoryModel):
         for appliance in self.filtered_appliances(appliance_category):
             appliance.switch_off()
 
+    def switch_off_all(self):
+        for appliance in self.list_appliances():
+            appliance.switch_off()
+
     def switch_on_appliances(self, appliance_category):
         """
         Switch on particular applicances
@@ -283,15 +287,36 @@ class Floor(BaseModel):
         return watts
 
     def boot(self):
-        if self.current_watts() >= self.max_watts():
-            return
-
         [corridor.boot() for corridor in self.list_corridors()]
         if TIME_SLOT_CURRENT is TIME_SLOT_DAY:
             return
         for rule in self._appliances_always_on:
             for corridor in self.filtered_corridors(rule['corridor']):
                 corridor.switch_on_appliances(rule['appliance'])
+
+    def is_active(self):
+        """
+        Can appliances in this room be optimized?
+        """
+        corridors = self.list_corridors()
+        for corridor in corridors:
+            if corridor.is_active():
+                return True
+        return False
+
+    def switch_off_all(self):
+        """
+        Can appliances in this room be optimized?
+        """
+        corridors = self.list_corridors()
+        for corridor in corridors:
+            corridor.switch_off_all()
+
+    def refresh(self):
+        if self.is_active():
+            return
+        self.switch_off_all()
+        self.boot()
 
     def optimize(self):
         """
@@ -314,6 +339,10 @@ class Building(BaseModel):
 
     def boot(self):
         [floor.boot() for floor in self.list_floors()]
+
+    def refresh(self):
+        for floor in self.list_floors():
+            floor.refresh()
 
     def optimize(self):
         [floor.optimize() for floor in self.list_floors()]
