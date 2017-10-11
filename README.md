@@ -18,7 +18,8 @@ Make sure you have `pipenv` installed.
 1. To get into shell: `pipenv shell` (To activate virtualenv)
 1. Install deps `pipenv install`
 1. Install Development deps `pipenv install -d`
-1. Test the code `pytest -v`
+1. Test the code `pytest -vs` (Verbose test output)
+1. Run the sample program `python run.py`
 
 ## Documentation
 
