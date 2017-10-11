@@ -7,6 +7,7 @@ from prana.enums import ApplianceCategory, CorridorCategory, ApplianceStatus
 class BaseModel:
     """
     This is the base on top of which all the actual models are built
+
     Building has `Floor` as components.
     Floor has `Corridor` as components.
     And so on..
